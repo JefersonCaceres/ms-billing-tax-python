@@ -8,17 +8,17 @@ def calculate():
     items = data.get("items", [])
     parameters = data.get("parameters", [])
 
-    subtotal = sum(item.get("quantity", 0) * item.get("unit_price", 0) for item in items)
+    subtotal = sum(item.get("quantity", 0) * item.get("unitPrice", 0) for item in items)
 
     tax_amount = 0
     discount_amount = 0
 
     for param in parameters:
 
-        type_ = param.get("param_type")
-        percent = param.get("value_percent")
-        amount = param.get("value_amount")
-        min_purchase = param.get("min_purchase")
+        type_ = param.get("paramType")
+        percent = param.get("valuePercent")
+        amount = param.get("valueAmount")
+        min_purchase = param.get("minPurchase")
 
         # ------- Impuestos -------
         if type_ == "TAX":
