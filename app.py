@@ -5,6 +5,11 @@ app = Flask(__name__)
 @app.route("/calculate", methods=["POST"])
 def calculate():
     data = request.json
+
+    # --- DEBUG: mostrar lo que llega ---
+    print("\n📌 JSON recibido en Python:")
+    print(data)
+
     items = data.get("items", [])
     parameters = data.get("parameters", [])
 
@@ -15,27 +20,19 @@ def calculate():
 
     for param in parameters:
 
-        type_ = param.get("paramType")
-        percent = param.get("valuePercent")
-        amount = param.get("valueAmount")
-        min_purchase = param.get("minPurchase")
+        type_ = param.get("paramType") or param.get("param_type")
+        percent = param.get("valuePercent") or param.get("value_percent")
+        amount = param.get("valueAmount") or param.get("value_amount")
+        min_purchase = param.get("minPurchase") or param.get("min_purchase")
 
-        # ------- Impuestos -------
-        if type_ == "TAX":
-            if percent:
-                tax_amount += subtotal * (percent / 100)
+        if type_ == "TAX" and percent:
+            tax_amount += subtotal * (percent / 100)
 
-        # ------- Descuentos -------
         if type_ == "DISCOUNT":
-            # fijo
             if amount:
                 discount_amount += amount
-
-            # porcentaje directo
             elif percent and not min_purchase:
                 discount_amount += subtotal * (percent / 100)
-
-            # porcentaje con rango
             elif percent and min_purchase and subtotal >= min_purchase:
                 discount_amount += subtotal * (percent / 100)
 
